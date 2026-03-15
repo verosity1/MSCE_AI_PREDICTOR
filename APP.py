@@ -13,7 +13,6 @@ st.write("UPLOAD STUDENTS DATASET TO TRAIN ARTIFICIAL INTELLIGENCE MODEL AND PRE
 # Grade classification
 # -----------------------------
 def grade_category(score):
-
     if 85 <= score >= 100:
         return "1, STRONG DISTINCTION"
     elif if 80 <= score >= 84:
