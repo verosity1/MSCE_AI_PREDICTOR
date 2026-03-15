@@ -4,27 +4,37 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="AI Student Performance Dashboard", layout="wide")
+st.set_page_config(page_title="ARTIFICIAL INTELLIGENCE STUDENTS PERFORMANCE DASHBOARD", layout="wide")
 
-st.title("AI Student Performance Prediction and Support System")
-st.write("Upload student dataset to train AI model and predict results.")
+st.title("ARTIFICIAL INTELLIGENCE STUDENTS PERFORMANCE PREDICTION AND SUPPORT SYSTEM")
+st.write("UPLOAD STUDENTS DATASET TO TRAIN ARTIFICIAL INTELLIGENCE MODEL AND PREDICT RESULTS.")
 
 # -----------------------------
 # Grade classification
 # -----------------------------
 def grade_category(score):
 
-    if score >= 80:
-        return "Distinction"
-
-    elif score >= 65:
-        return "Credit"
-
-    elif score >= 50:
-        return "Pass"
+    if 85 <= score >= 100:
+        return "1, STRONG DISTINCTION"
+    elif if 80 <= score >= 84:
+        return "2, WEAK DISTINCTION"
+    elif if 70 <= score >= 79:
+        return "3, STRONG CREDIT"
+    elif if 65 <= score >= 69:
+        return "4, STRONG CREDIT"
+    elif if 60 <= score >= 64:
+        return "5, WEAK CREDIT"
+    elif if 50 <= score >= 59:
+        return "6, WEAK CREDIT"
+    elif if 45 <= score >= 49: 
+        return "7, STRONG PASS"
+    elif if 40 <= score >= 44:
+        return "8, WEAK PASS"
+    elif if 0 <= score >= 39:
+        return"9, STATEMENT"
 
     else:
-        return "Fail"
+        return "INVALID MARKS"
 
 
 # -----------------------------
@@ -34,20 +44,20 @@ def recommend_support(row):
 
     recommendations = []
 
-    if row["Attendance"] < 60:
-        recommendations.append("Improve class attendance monitoring")
+    if row["ATTENDANCE"] < 60:
+        recommendations.append("IMPROVE CLASS ATTENDANCE MONITORING")
 
-    if row["Homework"] < 50:
-        recommendations.append("Provide additional homework practice")
+    if row["HOMEWORK"] < 50:
+        recommendations.append("PROVIDE ADDITIONAL HOMEWORK PRACTICE")
 
-    if row["CA_Score"] < 50:
-        recommendations.append("Offer remedial mathematics classes")
+    if row["CA_SCORE"] < 50:
+        recommendations.append("OFFER REMEDIAL MATHEMATICS CLASSES")
 
-    if row["Previous_Math"] < 50:
-        recommendations.append("Assign peer tutoring")
+    if row["PREVIOUS_MATHS"] < 50:
+        recommendations.append("ASSIGN PEER TUTORING")
 
     if len(recommendations) == 0:
-        return "Student performing well"
+        return "STUDENT PERFORMING WELL, REINFORCE POSITIVELY"
 
     return ", ".join(recommendations)
 
@@ -59,51 +69,51 @@ def risk_level(row):
 
     risk_score = 0
 
-    if row["Attendance"] < 60:
+    if row["ATTENDANCE"] < 60:
         risk_score += 1
 
-    if row["Homework"] < 50:
+    if row["HOMEWORK"] < 50:
         risk_score += 1
 
-    if row["CA_Score"] < 50:
+    if row["CA_SCORE"] < 50:
         risk_score += 1
 
-    if row["Previous_Math"] < 50:
+    if row["PREVIOUS MATH"] < 50:
         risk_score += 1
 
     if risk_score >= 3:
-        return "High Risk"
+        return "HIGH RISK"
 
     elif risk_score == 2:
-        return "Medium Risk"
+        return "MEDIUM RISK"
 
     else:
-        return "Low Risk"
+        return "LOW RISK"
 
 
 # -----------------------------
 # Upload dataset
 # -----------------------------
-uploaded_file = st.file_uploader("Upload CSV File", type="csv")
+uploaded_file = st.file_uploader("UPLOAD CSV FILE", type="csv")
 
 if uploaded_file:
 
     data = pd.read_csv(uploaded_file)
 
-    st.subheader("Dataset Preview")
+    st.subheader("DATASET PREVIEW")
     st.dataframe(data.head())
 
-    required = ['Attendance','Homework','CA_Score','Previous_Math','Result']
+    required = ['ATTENDANCE','HOMEWORK','CA_SCORE','PREVIOUS_MATH','RESULT']
 
     missing = [col for col in required if col not in data.columns]
 
     if missing:
 
-        st.error(f"Missing columns: {missing}")
+        st.error(f"MISSING COLUMN: {MISSING}")
 
     else:
 
-        X = data[['Attendance','Homework','CA_Score','Previous_Math']]
+        X = data[['ATTENDANCE','HOMEWORK','CA_SCORE','PREVIOUS_MATH']]
         y = data['Result']
 
         X_train, X_test, y_train, y_test = train_test_split(
@@ -114,36 +124,36 @@ if uploaded_file:
 
         model.fit(X_train, y_train)
 
-        st.success("AI Model trained successfully")
+        st.success("AI MODEL TRAINED SUCCESSFULLY")
 
         # Predictions
-        data["Prediction"] = model.predict(X)
+        data["PREDICTION"] = model.predict(X)
 
         # Grade estimation
-        data["Predicted_Grade"] = data["Previous_Math"].apply(grade_category)
+        data["PREDICTED_GRADE"] = data["PREVIOUS_MATH"].apply(grade_category)
 
         # Risk level
-        data["Risk_Level"] = data.apply(risk_level, axis=1)
+        data["RISK_LEVEL"] = data.apply(risk_level, axis=1)
 
         # Support recommendations
-        data["Support"] = data.apply(recommend_support, axis=1)
+        data["SUPPORT"] = data.apply(recommend_support, axis=1)
 
         # -----------------------------
         # Show predictions
         # -----------------------------
-        st.subheader("Predicted Student Results")
+        st.subheader("PREDICTED STUDENT RESULTS")
 
         st.dataframe(data[
-            ["Attendance","Homework","CA_Score","Previous_Math",
-             "Prediction","Predicted_Grade","Risk_Level"]
+            ["ATTENDANCE","HOMEWORK","CA_SCORE","PREVIOUS_MATH",
+             "PREDICTION","PREDICTED_GRADE","RISK_LEVEL"]
         ])
 
         # -----------------------------
         # National exam grade summary
         # -----------------------------
-        st.subheader("National Exam Grade Prediction Summary")
+        st.subheader("END OF TERM EXAMINATION GRADE PREDICTION SUMMARY")
 
-        grade_summary = data["Predicted_Grade"].value_counts()
+        grade_summary = data["PREDICTED_GRADE"].value_counts()
 
         st.dataframe(grade_summary)
 
@@ -158,49 +168,49 @@ if uploaded_file:
             autopct='%1.1f%%'
         )
 
-        ax.set_title("Predicted National Exam Performance")
+        ax.set_title("PREDICTED END OF TERM EXAMS PERFORMANCE")
 
         st.pyplot(fig)
 
         # -----------------------------
         # Early warning system
         # -----------------------------
-        st.subheader("Early Warning System")
+        st.subheader("EARLY WARNING SYSTEM")
 
-        high_risk = data[data["Risk_Level"] == "High Risk"]
+        high_risk = data[data["RISK_LEVEL"] == "HIGH RISK"]
 
-        st.write("Students needing urgent academic intervention")
+        st.write("STUDENTS NEEDING URGENT ACADEMIC INTERVETIONS")
 
         st.dataframe(high_risk[
-            ["Attendance","Homework","CA_Score",
-             "Previous_Math","Prediction","Risk_Level"]
+            ["ATTENDANCE","HOMEWORK","CA_SCORE",
+             "PREVIOUS_MATH","PREDICTION","RISK_LEVEL"]
         ])
 
         # -----------------------------
         # Support recommendations
         # -----------------------------
-        st.subheader("Student Support Recommendations")
+        st.subheader("STUDENTS SUPPORT RECOMMENDATION")
 
         st.dataframe(data[
-            ["Attendance","Homework","CA_Score",
-             "Prediction","Risk_Level","Support"]
+            ["ATTENDANCE","HOMEWORK","CA_SCORE",
+             "PREDICTION","RISK_LEVEL","SUPPORT"]
         ])
 
 
 # -----------------------------
 # Single student prediction
 # -----------------------------
-st.subheader("Single Student Prediction")
+st.subheader("SINGLE STUDENT PREDICTION")
 
-attendance = st.number_input("Attendance (%)",0,100)
-homework = st.number_input("Homework Score (%)",0,100)
-ca_score = st.number_input("CA Score (%)",0,100)
-previous_math = st.number_input("Previous Math Score (%)",0,100)
+attendance = st.number_input("ATTENDANCE (%)",0,100)
+homework = st.number_input("HOMEWORK SCORE (%)",0,100)
+ca_score = st.number_input("CA SCORE (%)",0,100)
+previous_math = st.number_input("PREVIOUS MATH SCORE (%)",0,100)
 
-if st.button("Predict Student Performance"):
+if st.button("PREDICT STUDENT PERFORMANCE"):
 
     sample = pd.DataFrame([[attendance,homework,ca_score,previous_math]],
-        columns=['Attendance','Homework','CA_Score','Previous_Math'])
+        columns=['ATTENDANCE','HOMEWORK','CA_SCORE','PREVIOUS MATH_SCORE'])
 
     model = RandomForestClassifier()
 
@@ -211,6 +221,6 @@ if st.button("Predict Student Performance"):
 
     grade = grade_category(previous_math)
 
-    st.success(f"Predicted Result: {prediction}")
+    st.success(f"PREDICTED RESULT: {prediction}")
 
-    st.info(f"Expected Grade: {grade}")
+    st.info(f"EXPECTED GRADE: {grade}")
